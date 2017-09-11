@@ -34,3 +34,83 @@
 "
 "===============================================================================
 " }
+
+" Environment {
+    " Identify platform {
+        silent function! IsLinux()
+            return has('unix') && !has('macunix') && !has('win32unix')
+        endfunction
+
+        silent function! IsWindows()
+            return (has('win16') || has('win32') || has('win64'))
+        endfunction
+    " }
+
+    " Basics {
+        set nocompatible    " Must be the first line
+
+        if (IsWindows())
+            set shell=powershell.exe
+            set shellcmdflag=-command
+        elseif (IsLinux())
+            set shell=/bin/bash
+        endif
+    " }
+
+    " Windows Compatible {
+        " On Windows, also use '.vim' instead of 'vimfiles'; this makes synchronization
+        " across (heterogeneous) systems easier.
+        if (IsWindows())
+            set runtimepath=$HOME/.vim
+            set runtimepath+=$VIM/vimfiles
+            set runtimepath+=$VIMRUNTIME
+            set runtimepath+=$VIM/vimfiles/after
+            set runtimepath+=$HOME/.vim/after
+
+            if has("multi_byte")
+                set termencoding=utf-8
+                set encoding=utf-8
+                setglobal fileencoding=utf-8
+                set fileencodings=ucs-bom,utf-8,utf-16le,cp1252,iso-8859-15
+            endif
+        endif
+    " }
+" }
+
+" Functions {
+    " Initialize directories {
+        function! InitializeDirectories()
+            let parent = $HOME
+            let prefix = 'vim'
+            let dir_list = {
+                    \ 'backup': 'backupdir',
+                    \ 'views': 'viewdir',
+                    \ 'swap': 'directory' }
+
+            if has('persistent_undo')
+                let dir_list['undo'] = 'undodir'
+            endif
+
+            let common_dir = parent . '/.vim/' . prefix
+
+            for [dirname, settingname] in items(dir_list)
+                let directory = common_dir . dirname . '/'
+
+                if exists("*mkdir")
+                    if !isdirectory(directory)
+                        call mkdir(directory)
+                    endif
+                endif
+
+                if !isdirectory(directory)
+                    echo "Warning: Unable to create backup directory: " . directory
+                    echo "Try: mkdir -p " . directory
+                else
+                    let directory = substitute(directory, " ", "\\\\ ", "g")
+                    exec "set " . settingname . "=" . directory
+                endif
+            endfor
+        endfunction
+        call InitializeDirectories()
+    " }
+" }
