@@ -78,6 +78,7 @@
         Plugin 'vim-airline/vim-airline'
         Plugin 'vim-airline/vim-airline-themes'
         Plugin 'powerline/fonts'
+        Plugin 'bling/vim-bufferline'
 
         " All of the Plugins must be added before the following line
         call vundle#end()
