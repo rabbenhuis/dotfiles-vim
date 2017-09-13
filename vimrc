@@ -79,6 +79,7 @@
         Plugin 'vim-airline/vim-airline-themes'
         Plugin 'powerline/fonts'
         Plugin 'bling/vim-bufferline'
+        Plugin 'mhinz/vim-signify'
 
         " All of the Plugins must be added before the following line
         call vundle#end()
@@ -289,6 +290,30 @@
                 let g:airline_left_sep='›'  " Slightly fancier than '>'
                 let g:airline_right_sep='‹' " Slightly fancier than '<'
             endif
+        endif
+    " }
+
+    " Signify {
+        if isdirectory(expand("~/.vim/bundle/vim-signify"))
+            highlight link SignifyLineAdd             DiffAdd
+            highlight link SignifyLineChange          DiffChange
+            highlight link SignifyLineDelete          DiffDelete
+            highlight link SignifyLineChangeDelete    SignifyLineChange
+            highlight link SignifyLineDeleteFirstLine SignifyLineDelete
+
+            highlight link SignifySignAdd             DiffAdd
+            highlight link SignifySignChange          DiffChange
+            highlight link SignifySignDelete          DiffDelete
+            highlight link SignifySignChangeDelete    SignifySignChange
+            highlight link SignifySignDeleteFirstLine SignifySignDelete
+
+            highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
+            highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
+            highlight DiffChange        cterm=bold ctermbg=none ctermfg=227
+
+            highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
+            highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
+            highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
         endif
     " }
 " }
