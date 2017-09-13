@@ -218,6 +218,8 @@
 
     " Remove trailing whitespaces and ^M chars
     autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+
+    autocmd FileType puppet,ruby,yml setlocal shiftwidth=2 softtabstop=2 tabstop=2
 " }
 
 " Key (re)mappings {
