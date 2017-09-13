@@ -93,6 +93,9 @@
             Plugin 'majutsushi/tagbar'
         endif
 
+        " Puppet
+        Plugin 'rodjek/vim-puppet'
+
         " All of the Plugins must be added before the following line
         call vundle#end()
     " }
