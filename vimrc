@@ -215,6 +215,9 @@
     "set matchpairs+=<:>             " Match, to be used with %
     set pastetoggle=<F12>           " pastetoggle (sane indentation on pastes)
     "set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
+
+    " Remove trailing whitespaces and ^M chars
+    autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 " }
 
 " Key (re)mappings {
@@ -226,27 +229,27 @@
     " Solarized {
         if isdirectory(expand("~/.vim/bundle/vim-colors-solarized"))
             let g:solarized_termcolors=256
-	        let g:solarized_termtrans=1
-	        let g:solarized_contrast="normal"
-	        let g:solarized_visibility="normal"
-	        colorscheme solarized
+            let g:solarized_termtrans=1
+            let g:solarized_contrast="normal"
+            let g:solarized_visibility="normal"
+            colorscheme solarized
         endif
     " }
 
     " NERDTree {
         if isdirectory(expand("~/.vim/bundle/nerdtree"))
-	        map <C-e> :NERDTreeToggle<CR>
-	        map <leader>e :NERDTreeFind<CR>
-	        nmap <leader>nt :NERDTreeFind<CR>
+            map <C-e> :NERDTreeToggle<CR>
+            map <leader>e :NERDTreeFind<CR> 	        nmap <leader>nt :NERDTreeFind<CR>
+            nmap <leader>nt :NERDTreeFind<CR>
 
-	        let NERDTreeShowBookmarks=1
-	        let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
-	        let NERDTreeChDirMode=2
-	        let NERDTreeQuitOnOpen=1
-	        let NERDTreeMouseMode=2
-	        let NERDTreeShowHidden=1
-	        let NERDTreeKeepTreeInNewTab=1
-	        let g:nerdtree_tabs_open_on_gui_startup=0
+            let NERDTreeShowBookmarks=1
+            let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
+            let NERDTreeChDirMode=2
+            let NERDTreeQuitOnOpen=1
+            let NERDTreeMouseMode=2
+            let NERDTreeShowHidden=1
+            let NERDTreeKeepTreeInNewTab=1
+            let g:nerdtree_tabs_open_on_gui_startup=0
         endif
     " }
 " }
@@ -315,5 +318,19 @@
             endif
         endfunction
         noremap <leader>bg :call ToggleBG()<CR>
+    " }
+
+    " Strip whitespaces {
+        function! StripTrailingWhitespace()
+            " Preparation: save last search, and cursor position
+            let _s=@/
+            let l = line(".")
+            let c = col(".")
+            " do the business:
+            %s/\s\+$//e
+            " clean up: restore previous search history, and cursor position
+            let @/=_s
+            call cursor(l, c)
+        endfunction
     " }
 " }
