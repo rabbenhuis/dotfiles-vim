@@ -1,5 +1,5 @@
 " Modeline and Notes {
-" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=9 foldmethod=marker spell:
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=9 foldmethod=marker
 "===============================================================================
 "
 "   Personal vimrc file.
@@ -74,6 +74,27 @@
         " General plugins
         Plugin 'altercation/vim-colors-solarized'
         Plugin 'scrooloose/nerdtree'
+        Plugin 'rhysd/conflict-marker.vim'
+        Plugin 'vim-airline/vim-airline'
+        Plugin 'vim-airline/vim-airline-themes'
+        Plugin 'powerline/fonts'
+        Plugin 'bling/vim-bufferline'
+        Plugin 'mhinz/vim-signify'
+
+        " General Programming
+        Plugin 'scrooloose/syntastic'
+        Plugin 'tpope/vim-fugitive'
+        Plugin 'mattn/webapi-vim'
+        Plugin 'scrooloose/nerdcommenter'
+        Plugin 'tpope/vim-commentary'
+        Plugin 'godlygeek/tabular'
+        Plugin 'luochen1990/rainbow'
+        if executable('ctags')
+            Plugin 'majutsushi/tagbar'
+        endif
+
+        " Puppet
+        Plugin 'rodjek/vim-puppet'
 
         " All of the Plugins must be added before the following line
         call vundle#end()
@@ -121,7 +142,7 @@
     set viewoptions=folds,options,cursor,unix,slash " Better Unix / Windows compatibility
     set virtualedit=onemore             " Allow for cursor beyond last character
     set history=1000                    " Store a ton of history (default is 20)
-    set spell                           " Spell checking on
+    set nospell                         " Spell checking off
     set hidden                          " Allow buffer switching without saving
     set iskeyword-=.                    " '.' is an end of word designator
     set iskeyword-=#                    " '#' is an end of word designator
@@ -178,6 +199,7 @@
         " Broken down into easily includeable segments
         set statusline=%<%f\                     " Filename
         set statusline+=%w%h%m%r                 " Options
+        set statusline+=%{fugitive#statusline()} " Git Hotness
         set statusline+=\ [%{&ff}/%Y]            " Filetype
         set statusline+=\ [%{getcwd()}]          " Current dir
         set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
@@ -237,6 +259,9 @@
     nmap <leader>f7 :set foldlevel=7<CR>
     nmap <leader>f8 :set foldlevel=8<CR>
     nmap <leader>f9 :set foldlevel=9<CR>
+
+    " Find merge conflict markers
+    map <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
 " }
 
 " Plugins {
@@ -264,6 +289,108 @@
             let NERDTreeShowHidden=1
             let NERDTreeKeepTreeInNewTab=1
             let g:nerdtree_tabs_open_on_gui_startup=0
+        endif
+    " }
+
+    " vim-airline {
+        " Set configuration options for the statusline plugin vim-airline.
+        " Use the powerline theme and optionally enable powerline symbols.
+
+        " See `:echo g:airline_theme_map` for some more choices
+        " Default in terminal vim is 'dark'
+        if isdirectory(expand("~/.vim/bundle/vim-airline-themes/"))
+            if !exists('g:airline_theme')
+                let g:airline_theme='dark'
+
+                " Use the default set of separators with a few customizations
+                let g:airline_left_sep='›'  " Slightly fancier than '>'
+                let g:airline_right_sep='‹' " Slightly fancier than '<'
+            endif
+        endif
+    " }
+
+    " Signify {
+        if isdirectory(expand("~/.vim/bundle/vim-signify"))
+            highlight link SignifyLineAdd             DiffAdd
+            highlight link SignifyLineChange          DiffChange
+            highlight link SignifyLineDelete          DiffDelete
+            highlight link SignifyLineChangeDelete    SignifyLineChange
+            highlight link SignifyLineDeleteFirstLine SignifyLineDelete
+
+            highlight link SignifySignAdd             DiffAdd
+            highlight link SignifySignChange          DiffChange
+            highlight link SignifySignDelete          DiffDelete
+            highlight link SignifySignChangeDelete    SignifySignChange
+            highlight link SignifySignDeleteFirstLine SignifySignDelete
+
+            highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
+            highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
+            highlight DiffChange        cterm=bold ctermbg=none ctermfg=227
+
+            highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
+            highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
+            highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
+        endif
+    " }
+
+    " Syntastic {
+        set statusline+=%#warningmsg#
+        set statusline+=%{SyntasticStatuslineFlag()}
+        set statusline+=%*
+
+        let g:syntastic_always_populate_loc_list = 1
+        let g:syntastic_auto_loc_list = 1
+        let g:syntastic_check_on_open = 1
+        let g:syntastic_check_on_wq = 0
+    " }
+
+    " Fugitive {
+        if isdirectory(expand("~/.vim/bundle/vim-fugitive/"))
+            nnoremap <silent> <leader>gs :Gstatus<CR>
+            nnoremap <silent> <leader>gd :Gdiff<CR>
+            nnoremap <silent> <leader>gc :Gcommit<CR>
+            nnoremap <silent> <leader>gb :Gblame<CR>
+            nnoremap <silent> <leader>gl :Glog<CR>
+            nnoremap <silent> <leader>gp :Git push<CR>
+            nnoremap <silent> <leader>gr :Gread<CR>
+            nnoremap <silent> <leader>gw :Gwrite<CR>
+            nnoremap <silent> <leader>ge :Gedit<CR>
+            " Mnemonic _i_nteractive
+            nnoremap <silent> <leader>gi :Git add -p %<CR>
+            nnoremap <silent> <leader>gg :SignifyToggle<CR>
+        endif
+    " }
+
+    " Tabularize {
+        if isdirectory(expand("~/.vim/bundle/tabular"))
+            nmap <Leader>a& :Tabularize /&<CR>
+            vmap <Leader>a& :Tabularize /&<CR>
+            nmap <Leader>a= :Tabularize /^[^=]*\zs=<CR>
+            vmap <Leader>a= :Tabularize /^[^=]*\zs=<CR>
+            nmap <Leader>a=> :Tabularize /=><CR>
+            vmap <Leader>a=> :Tabularize /=><CR>
+            nmap <Leader>a: :Tabularize /:<CR>
+            vmap <Leader>a: :Tabularize /:<CR>
+            nmap <Leader>a:: :Tabularize /:\zs<CR>
+            vmap <Leader>a:: :Tabularize /:\zs<CR>
+            nmap <Leader>a, :Tabularize /,<CR>
+            vmap <Leader>a, :Tabularize /,<CR>
+            nmap <Leader>a,, :Tabularize /,\zs<CR>
+            vmap <Leader>a,, :Tabularize /,\zs<CR>
+            nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
+            vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
+        endif
+    " }
+
+    " Rainbow {
+        if isdirectory(expand("~/.vim/bundle/rainbow/"))
+            let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
+        endif
+    " }
+
+    " TagBar {
+        if isdirectory(expand("~/.vim/bundle/tagbar/"))
+            nnoremap <silent> <leader>tt :TagbarToggle<CR>
         endif
     " }
 " }
