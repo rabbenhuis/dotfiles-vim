@@ -74,6 +74,7 @@
         " General plugins
         Plugin 'altercation/vim-colors-solarized'
         Plugin 'scrooloose/nerdtree'
+        Plugin 'rhysd/conflict-marker.vim'
 
         " All of the Plugins must be added before the following line
         call vundle#end()
@@ -237,6 +238,9 @@
     nmap <leader>f7 :set foldlevel=7<CR>
     nmap <leader>f8 :set foldlevel=8<CR>
     nmap <leader>f9 :set foldlevel=9<CR>
+
+    " Find merge conflict markers
+    map <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
 " }
 
 " Plugins {
