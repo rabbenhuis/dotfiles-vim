@@ -1,5 +1,5 @@
 " Modeline and Notes {
-" vim: set sw=4 ts=4 sts=4 et tw=78
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=9 foldmethod=marker spell:
 "===============================================================================
 "
 "   Personal vimrc file.
@@ -58,25 +58,25 @@
     " }
 
     " Setup Vundle support {
-	    filetype off
+        filetype off
 
-	    " Set the runtime path to include Vundle and initialize
-	    set rtp+=~/.vim/bundle/Vundle.vim
-	    call vundle#begin()
+        " Set the runtime path to include Vundle and initialize
+        set rtp+=~/.vim/bundle/Vundle.vim
+        call vundle#begin()
 
-	    " Let Vundle manage Vundle, required
-	    Plugin 'VundleVim/Vundle.vim'
+        " Let Vundle manage Vundle, required
+        Plugin 'VundleVim/Vundle.vim'
 
         " Dependency plugins
         Plugin 'MarcWeber/vim-addon-mw-utils'
         Plugin 'tomtom/tlib_vim'
 
-	    " General plugins
-	    Plugin 'altercation/vim-colors-solarized'
-	    Plugin 'scrooloose/nerdtree'
+        " General plugins
+        Plugin 'altercation/vim-colors-solarized'
+        Plugin 'scrooloose/nerdtree'
 
-	    " All of the Plugins must be added before the following line
-	    call vundle#end()
+        " All of the Plugins must be added before the following line
+        call vundle#end()
     " }
 
     " Windows Compatible {
@@ -225,6 +225,18 @@
 " Key (re)mappings {
     let mapleader = ','
     let maplocalleader = '_'
+
+    " Code folding options
+    nmap <leader>f0 :set foldlevel=0<CR>
+    nmap <leader>f1 :set foldlevel=1<CR>
+    nmap <leader>f2 :set foldlevel=2<CR>
+    nmap <leader>f3 :set foldlevel=3<CR>
+    nmap <leader>f4 :set foldlevel=4<CR>
+    nmap <leader>f5 :set foldlevel=5<CR>
+    nmap <leader>f6 :set foldlevel=6<CR>
+    nmap <leader>f7 :set foldlevel=7<CR>
+    nmap <leader>f8 :set foldlevel=8<CR>
+    nmap <leader>f9 :set foldlevel=9<CR>
 " }
 
 " Plugins {
