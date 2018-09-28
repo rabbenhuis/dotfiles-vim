@@ -96,6 +96,11 @@
         " Puppet
         Plugin 'rodjek/vim-puppet'
 
+        " Docker"
+        Plugin 'ekalinin/Dockerfile.vim'
+        Plugin 'stephpy/vim-yaml'
+        Plugin 'tpope/vim-dotenv'
+
         " All of the Plugins must be added before the following line
         call vundle#end()
     " }
