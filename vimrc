@@ -101,6 +101,9 @@
         Plugin 'stephpy/vim-yaml'
         Plugin 'tpope/vim-dotenv'
 
+        " Jenkinsfile
+        Plugin 'martinda/Jenkinsfile-vim-syntax'
+
         " All of the Plugins must be added before the following line
         call vundle#end()
     " }
